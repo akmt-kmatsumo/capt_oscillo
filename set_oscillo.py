@@ -2,8 +2,6 @@
 def set_osillo():
 #test modify
 #test modify
-#test modify
-#test modify
     import pyvisa
 
     rm = pyvisa.ResourceManager()
