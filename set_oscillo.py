@@ -1,5 +1,6 @@
 ###オシロMSO24接続確認###
 def set_osillo():
+#test modify
     import pyvisa
 
     rm = pyvisa.ResourceManager()
@@ -19,5 +20,4 @@ def set_osillo():
     print(inst.query('*IDN?'))
 
 if __name__ == "__main__":
-#test modify
     set_osillo
