@@ -21,7 +21,7 @@ print(inst.query('*IDN?'))
 print('\nPlease enter \'quit\' to exit. \n')
 
 # キャプチャ枚数確認(現Ver：7秒毎に1枚)
-# 秒数オプションやマニュアル操作も実装した方が良い?
+#   秒数オプションやマニュアル操作も実装した方が良い?
 count_str = input('How many pict? (def=10): ')
 if count_str == '':
     count_str = '10'

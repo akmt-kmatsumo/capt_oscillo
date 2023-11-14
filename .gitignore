@@ -1,8 +1,14 @@
 # 以下にgitトラッキングしたくないディレクトリ、ファイルを指定
 env/
+*.xlsx
 
 # 仮想環境の有効化
 # env\Scripts\Activate.ps1
 
 # 仮想環境の無効化
 # deactivate
+
+# 仮想環境にインストールしたライブラリを書き出す
+# pip freeze > requirements.txt
+# 書き出されたライブラリをインストールする
+# pip install -r requirements.txt
