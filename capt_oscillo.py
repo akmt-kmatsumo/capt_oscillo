@@ -1,4 +1,4 @@
-###オシロMSO24の波形画像をPCに取り込む###
+######## オシロMSO24の波形画像をPCに取り込む ########
 def save_screen(count_i,inst,type_f):
     if type_f == "0":
         save_img(count_i,inst)
@@ -13,19 +13,19 @@ def save_img(count_sv,inst):
     import time
     from datetime import datetime
 
-    #オシロスコープの内蔵HDにテンポラリのキャプチャ画像を保存
+    # オシロスコープの内蔵HDにテンポラリのキャプチャ画像を保存
     inst.write('SAVE:IMAGe \"C:/Temp.png\"')
 
-    #画像のキャプチャ処理が終了するまで待つ
+    # 画像のキャプチャ処理が終了するまで待つ
     while inst.query('*OPC?')[0]!="1":
         print("Waiting")
         time.sleep(1)   #Wait_1sec
 
-    #保存された画像ファイルをPC側へ読み出す
+    # 保存された画像ファイルをPC側へ読み出す
     inst.write('FILESystem:READFile \"C:/Temp.png\"')
     img_data = inst.read_raw()
 
-    #PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
+    # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
     dt=datetime.now()
     filename = dt.strftime("IMG" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
     file = open(filename,"wb")
@@ -37,27 +37,26 @@ def save_csv(count_sv, inst):
     import time
     from datetime import datetime
 
-    #チャンネル1の波形データを内蔵HDにcsv形式で保存する
+    # チャンネル1の波形データを内蔵HDにcsv形式で保存する
     inst.write('SAVE:WAVEform CH1, \"C:/Temp.csv\"')
 
-    #波形データの保存処理が終了するまで待つ
+    # 波形データの保存処理が終了するまで待つ
     while inst.query('*OPC?')[0]!="1":
         print("Waiting")
         time.sleep(1)   #Wait_1sec
 
-    #保存されたcsvファイルをPC側へ読み出す
+    # 保存されたcsvファイルをPC側へ読み出す
     inst.write('FILESystem:READFile \"C:/Temp.csv\"')
     wave_data = inst.read_raw()
 
-    #PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
+    # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
     dt=datetime.now()
     filename = dt.strftime("DATA" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
     file = open(filename,"wb")
     file.write(wave_data)
     file.close()
 
-
-
+#############################################################
 if __name__ == "__main__":
     import pyvisa
 
