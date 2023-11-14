@@ -1,0 +1,8 @@
+# 以下にgitトラッキングしたくないディレクトリ、ファイルを指定
+env/
+
+# 仮想環境の有効化
+# env\Scripts\Activate.ps1
+
+# 仮想環境の無効化
+# deactivate
