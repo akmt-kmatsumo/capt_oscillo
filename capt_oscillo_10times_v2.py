@@ -51,6 +51,11 @@ else :
     print('\n Capture \"NOT\" Completed\n')
     sys.exit()
 
+MAX_CH = 4
+print('\n')
+for i in range(MAX_CH):
+    print('Enable CH' + str(i+1) +': ' + inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?'))
+
 import capt_oscillo
 count = 0
 

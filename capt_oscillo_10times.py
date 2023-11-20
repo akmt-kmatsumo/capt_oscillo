@@ -1,5 +1,6 @@
 ###オシロMSO24の波形画像をPCに取り込む###
 import pyvisa
+import pandas as pd
 
 #VisaAddrの取得
 rm = pyvisa.ResourceManager()
@@ -22,6 +23,16 @@ count = 0
 while count < 10:
     #オシロスコープstop
     inst.write('ACQuire:STATE STOP')
+
+    #アクティブ状態のチャンネルを検出する（同時に最も若い番号のチャンネル番号も取得）
+    for i in range(MAX_CH):
+        ch_en.append(int(inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?')))
+        if ch_en[i] == 1 and IsFirstCh:
+            first_ch = i
+            IsFirstCh = False
+
+    #チャンネルごとに波形データ取得処理
+    csv_lst = [ 0 for i in range(MAX_CH)]
 
     #オシロスコープの内蔵HDにテンポラリのキャプチャ画像を保存
     inst.write('SAVE:IMAGe \"C:/Temp.png\"')
