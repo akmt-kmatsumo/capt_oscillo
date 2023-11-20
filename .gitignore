@@ -1,10 +1,14 @@
 # 以下にgitトラッキングしたくないディレクトリ、ファイルを指定
-env/
-build/
-dist/
 *.xlsx
 *.exe
 *.spec
+*.csv
+*.png
+
+env/*
+.venv/*
+build/*
+dist/*
 
 # 仮想環境の有効化
 # env\Scripts\Activate.ps1
