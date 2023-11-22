@@ -48,7 +48,7 @@ def save_csv(count_sv, inst):
         ch_en.append(int(inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?')))
         if ch_en[i] == 1 and IsFirstCh:
             first_ch = i
-            print('first_ch = ' + str(first_ch)) #for debug
+            print('\nfirst_ch = ' + str(first_ch)) #for debug
             IsFirstCh = False
 
     print('ch_en = ')  #for debug

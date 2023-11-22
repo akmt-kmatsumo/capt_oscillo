@@ -67,9 +67,9 @@ while count < count_max:
 
     if (count_max//40) > 1:
         if (count%5) == 0:
-            print('count = ' + str(count))
+            print(' count = ' + str(count))
     else:
-        print('count = ' + str(count))
+        print(' count = ' + str(count))
 
     capt_oscillo_v2.save_screen(count,inst,type_f)
     count += 1
