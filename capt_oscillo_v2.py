@@ -63,7 +63,6 @@ def save_csv(count_sv, inst):
         if ch_en[n]==1:
             #チャンネル番号を生成し、PyVISAでオシロスコープの内蔵HDに波形データを保存させる
             ch_no = "CH" + str(n+1)
-            print('ch_no = ' + ch_no)   #for debug
 
             inst.write('SAVE:WAVEform '+ch_no+', \"C:/Temp.csv\"')
             # inst.write('SAVE:WAVEform CH'+str(i+1)+', \"C:/Temp.csv\"')
@@ -71,8 +70,6 @@ def save_csv(count_sv, inst):
             #PC側へ保存する個別波形データの名前を定義
             filename = "temp_" + ch_no +".csv"
             csv_lst [n] = filename
-            print(filename)
-            print(csv_lst)
 
             #波形データの保存処理が終了するまで待つ
             while inst.query('*OPC?')[0]!="1":
@@ -93,11 +90,12 @@ def save_csv(count_sv, inst):
 
     #オシロスコープ側のテンポラリ画像ファイルを削除
     inst.write('FILESystem:DELEte \"C:/Temp.csv\"')
-    print('Delete temp file.')  #for debug
+    print('Delete temp file in oscillo.')
 
     ###### 波形データの統合処理 ######
-    CSV_HEADER_ROWS = 7
+    CSV_HEADER_ROWS = 8
     CSV_SKIP_ROWS = 9
+    # ここはオシロの種類や設定によって変わるらしい。要調整（自動検知したい。。。）
 
     #アクティブチャンネルを検出した数だけ波形データの格納リストを作る
     ch_wave =[[] for i in range(sum(ch_en))]
@@ -107,12 +105,12 @@ def save_csv(count_sv, inst):
     time_dt = pd.read_csv(csv_lst[first_ch],header = None, usecols=[0],skiprows=CSV_SKIP_ROWS)
 
     #最大チャンネル数まで波形データが保存されているかをチェックし、あれば格納リストにcsvデータを格納
-    wave_cnt = 0
+    # wave_cnt = 0
     for i in range(MAX_CH):
         if csv_lst[i]!=0:
-            ch_wave[wave_cnt] = pd.read_csv(csv_lst[first_ch],header = None, usecols=[1],skiprows=CSV_SKIP_ROWS)
-            ch_wave[wave_cnt].columns =["CH" +str(i+1)]
-            wave_cnt +=1
+            ch_wave[i] = pd.read_csv(csv_lst[i],header = None, usecols=[1],skiprows=CSV_SKIP_ROWS)
+            ch_wave[i].columns =["CH" +str(i+1)]
+            # wave_cnt +=1
             
     #取得したチャンネルごとの波形データを1つのDataFrameに統合(最初の列は時間軸にする)
     out_dt = time_dt
