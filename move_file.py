@@ -60,7 +60,13 @@ def move_csv():
     
     for p in glob.glob(current_dir + '\\DATA*.csv', recursive=True):
         shutil.move(p, current_dir + '\\csv\\' + save_into)
-
+    
+    ########   一次csvファイルを削除したい時   ########
+    # for p in glob.glob(current_dir + '\\temp_*.csv', recursive=True):
+    #     if os.path.isfile(p):
+    #         os.remove(p)
+    ################################################
+        
 if __name__ == "__main__":
     import sys
 

@@ -40,30 +40,40 @@ def save_csv(count_sv, inst):
 
     MAX_CH = 4     #オシロスコープの最大チャンネル数
     ch_en=[]
-    IsFirstCh = False
+    IsFirstCh = True
+    # IsFirstCh = False
 
     #アクティブ状態のチャンネルを検出する（同時に最も若い番号のチャンネル番号も取得）
     for i in range(MAX_CH):
         ch_en.append(int(inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?')))
         if ch_en[i] == 1 and IsFirstCh:
             first_ch = i
-            print(first_ch) #for debug
+            print('first_ch = ' + str(first_ch)) #for debug
             IsFirstCh = False
+
+    print('ch_en = ')  #for debug
+    print(ch_en)  #for debug
 
     #チャンネルごとに波形データ取得処理
     csv_lst = [ 0 for i in range(MAX_CH)]
 
     for n in range(MAX_CH):
         #チャンネルがアクティブなら波形取得処理開始
+        print('ch_en[' + str(n) + '] = ' + str(ch_en[n]))   #for debug
         if ch_en[n]==1:
             #チャンネル番号を生成し、PyVISAでオシロスコープの内蔵HDに波形データを保存させる
-            ch_no = "CH" + str(i+1)
-            inst.write('SAVE:WAVEform '+ch_no +', \"C:Temp.csv\"')
+            ch_no = "CH" + str(n+1)
+            print('ch_no = ' + ch_no)   #for debug
+
+            inst.write('SAVE:WAVEform '+ch_no+', \"C:/Temp.csv\"')
+            # inst.write('SAVE:WAVEform CH'+str(i+1)+', \"C:/Temp.csv\"')
             
             #PC側へ保存する個別波形データの名前を定義
             filename = "temp_" + ch_no +".csv"
             csv_lst [n] = filename
-            
+            print(filename)
+            print(csv_lst)
+
             #波形データの保存処理が終了するまで待つ
             while inst.query('*OPC?')[0]!="1":
                 print("Waiting")
@@ -83,6 +93,7 @@ def save_csv(count_sv, inst):
 
     #オシロスコープ側のテンポラリ画像ファイルを削除
     inst.write('FILESystem:DELEte \"C:/Temp.csv\"')
+    print('Delete temp file.')  #for debug
 
     ###### 波形データの統合処理 ######
     CSV_HEADER_ROWS = 7
@@ -134,14 +145,29 @@ if __name__ == "__main__":
     import time
     from datetime import datetime
  
-     #接続確認 (機器識別コードを返します)
+    # 接続確認 (機器識別コードを返します。できない場合はエラーで終了)
     inst = rm.open_resource(VISAAddr_str0)
-    #print(inst.query('*IDN?'))
+    print(inst.query('*IDN?'))
 
     #オシロスコープstop
     inst.write('ACQuire:STATE STOP')
 
-    type_f = input('Select Format[0:PNG&CSV 1:PNG 2:CSV] ')
+    type_f = input('Select Format[0:PNG&CSV 1:PNG 2:CSV (def=2)] ')
+    if type_f == '':
+        type_f = '2'
+    if type_f == '0' or type_f == '1' or type_f == '2':
+        pass
+    else :
+        print('\n Invalid Value')
+        print('\n Capture \"NOT\" Completed\n')
+        sys.exit()
+
+    # アクティブなチャネルを確認
+    MAX_CH = 4
+    print('\n')
+    for i in range(MAX_CH):
+        print('Enable CH' + str(i+1) +': ' + inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?'))
+
     save_screen(100,inst,type_f)
     
     #オシロスコープrun

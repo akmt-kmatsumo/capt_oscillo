@@ -14,7 +14,7 @@ VISAAddr_str0 = VISAAddr[0]
 
 inst = rm.open_resource(VISAAddr_str0)
 
-# 接続確認 (機器識別コードを返します)
+# 接続確認 (機器識別コードを返します。できない場合はエラーで終了)
 print(inst.query('*IDN?'))
 
 # プログラムを終了させるときは'quit'をEnter
@@ -51,12 +51,13 @@ else :
     print('\n Capture \"NOT\" Completed\n')
     sys.exit()
 
+# アクティブなチャネルを確認
 MAX_CH = 4
 print('\n')
 for i in range(MAX_CH):
     print('Enable CH' + str(i+1) +': ' + inst.query('DISplay:GLObal:CH'+str(i+1)+':STATE?'))
 
-import capt_oscillo
+import capt_oscillo_v2
 count = 0
 
 # [count_max]枚をキャプチャする
@@ -70,7 +71,7 @@ while count < count_max:
     else:
         print('count = ' + str(count))
 
-    capt_oscillo.save_screen(count,inst,type_f)
+    capt_oscillo_v2.save_screen(count,inst,type_f)
     count += 1
 
     # オシロスコープrun
