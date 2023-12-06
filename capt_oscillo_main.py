@@ -18,18 +18,19 @@ inst = rm.open_resource(VISAAddr_str0)
 id_osc = inst.query('*IDN?')
 print(id_osc)
 
-if 'DPO' in id_osc:
-    id_osc = 'DPO'
+import re
+if 'DPO' or 'TDS' or 'TBS' in id_osc:
+    id_osc = re.search(r'(DPO|TDS|TBS)',id_osc)
+    id_osc = id_osc.group()
+    print(id_osc)
     print(id_osc + ' is supported "only PNG" in this version.')
-elif 'TDS' in id_osc:
-    id_osc = 'TDS'
-    print(id_osc + ' is supported PNG format only in this version.')
+    # sys.exit()  #未完成のためここで終了
 elif 'MSO' in id_osc:
     id_osc = 'MSO'
 else:
     print('\n This oscilloscope is \"NOT\" supported.\n')
     sys.exit()
-
+exit()
 # プログラムを終了させるときは'quit'をEnter
 print('\nPlease enter \'quit\' to exit. \n')
 
@@ -68,7 +69,7 @@ if id_osc == 'MSO':
     pass
 elif id_osc == 'DPO' or id_osc == 'TDS':
     print('\n' +id_osc + ' is supported "only PNG" in this version.\n')
-exit()  #for debug
+# exit()  #for debug
 
 # アクティブなチャネルを確認
 MAX_CH = 4
@@ -82,10 +83,26 @@ import capt_oscillo_v2
 import capt_oscillo_v3
 count = 0
 
+auto_capt = input('"Auto[A]" or "Manual[M]"? : ')
+if auto_capt == 'A':
+    auto_capt = 'Auto'
+elif auto_capt == 'M':
+    auto_capt = 'Manual'
+else:
+    print('invalid value')
+    sys.exit()
+
 # [count_max]枚をキャプチャする
 while count < count_max:
+    capt_ready = input('Ready? "y" or "n" :')
     # オシロスコープstop
-    inst.write('ACQuire:STATE STOP')
+    while capt_ready !="y":
+        print("\n Waiting...\n")
+        time.sleep(1)
+        capt_ready = input('Ready? "y" or "n" :')
+
+    if auto_capt == 'Auto':
+        inst.write('ACQuire:STATE STOP')
 
     if (count_max//40) > 1:
         if (count%5) == 0:
@@ -101,7 +118,8 @@ while count < count_max:
     count += 1
 
     # オシロスコープrun
-    inst.write('ACQuire:STATE RUN')
+    if auto_capt == 'Auto':
+        inst.write('ACQuire:STATE RUN')
 
     if count < count_max:
         time.sleep(7)   # wait_7sec
