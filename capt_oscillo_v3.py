@@ -1,11 +1,11 @@
 ######## オシロMSO24の波形画像をPCに取り込む ########
 def save_screen(count_i,inst,type_f):
-    if type_f == "0":
+    if type_f == '0':
         save_img(count_i,inst)
         save_csv(count_i,inst)
-    if type_f == "1":
+    if type_f == '1':
         save_img(count_i,inst)
-    if type_f == "2":
+    if type_f == '2':
         save_csv(count_i,inst)
 
 def save_img(count_sv,inst):
@@ -26,11 +26,15 @@ def save_img(count_sv,inst):
 
     # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
     dt=datetime.now()
-    filename = dt.strftime("IMG" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
+    if count_sv < 10:
+        filename = dt.strftime("IMG0" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
+    else:
+        filename = dt.strftime("IMG" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
     file = open(filename,"wb")
     file.write(BinDat)
     file.close()
 
+# todo DPO/TDSでのcsv保存
 def save_csv(count_sv, inst):
     import pyvisa
     import time
@@ -119,13 +123,19 @@ def save_csv(count_sv, inst):
     # for i in range(sum(ch_en)):
     #     out_dt = pd.concat([out_dt,ch_wave[i]],axis=1)
 
-    # # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
-    # dt=datetime.now()
-    # wave_filename = dt.strftime("DATA" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
-
+    # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
+    dt=datetime.now()
+    if count_sv < 10:
+        wave_filename = dt.strftime("DATA0" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
+    else:
+        wave_filename = dt.strftime("DATA" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
     # #Pandasの機能を使って、DataFrameをcsvに変換。このとき個別のcsvとヘッダデータ部分は共通にする
     # header.to_csv(wave_filename,header= False, index = False)
     # out_dt.to_csv(wave_filename,header= True, index = False,mode = 'a')
+    hoge1 = [1,2,3]     #for debug
+    hogehoge = pd.DataFrame(hoge1,)  #for debug
+    hogehoge = hogehoge.rename(columns={0:'Sorry. This function has not been implemented yet.'})    #for debug
+    hogehoge.to_csv(wave_filename,header= True, index = True)   #for debug
     # print("Wave File #" + str(count_sv) + " Output Complete")
 
 ##########################################################################################

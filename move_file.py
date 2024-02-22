@@ -17,13 +17,12 @@ def move_img():
     current_dir = os.getcwd()
 
     save_into = input('Save png into ' + current_dir + '\\pict\\[dir_name] \n\
-    dir_name (def=test) =  ')
-    if save_into == '':
-        save_into = 'test'
+    dir_name (def=test) =  ') or 'test'
     if save_into == 'quit':
         print('\n Caution : File still remains in ' + current_dir)
-        print('\n Capture \"NOT\" Completed\n')
-        sys.exit()
+        return
+        # print('\n Capture \"NOT\" Completed\n')
+        # sys.exit()
 
     path_ok = os.path.isdir(current_dir + '\\pict\\' + save_into)
     if path_ok == False:

@@ -1,11 +1,11 @@
 ######## オシロMSO24の波形画像をPCに取り込む ########
 def save_screen(count_i,inst,type_f):
-    if type_f == "0":
+    if type_f == '0':
         save_img(count_i,inst)
         save_csv(count_i,inst)
-    if type_f == "1":
+    if type_f == '1':
         save_img(count_i,inst)
-    if type_f == "2":
+    if type_f == '2':
         save_csv(count_i,inst)
 
 def save_img(count_sv,inst):
@@ -27,7 +27,10 @@ def save_img(count_sv,inst):
 
     # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
     dt=datetime.now()
-    filename = dt.strftime("IMG" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
+    if count_sv < 10:
+        filename = dt.strftime("IMG0" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
+    else:
+        filename = dt.strftime("IMG" + str(count_sv) + "_%Y%m%d_%H%M%S.png")
     file = open(filename,"wb")
     file.write(img_data)
     file.close()
@@ -119,7 +122,10 @@ def save_csv(count_sv, inst):
 
     # PC側に保存する際にdatetimeモジュールを使い、日付＋時間のファイル名で保存する
     dt=datetime.now()
-    wave_filename = dt.strftime("DATA" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
+    if count_sv < 10:
+        wave_filename = dt.strftime("DATA0" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
+    else:
+        wave_filename = dt.strftime("DATA" + str(count_sv) + "_%Y%m%d_%H%M%S.csv")
 
     #Pandasの機能を使って、DataFrameをcsvに変換。このとき個別のcsvとヘッダデータ部分は共通にする
     header.to_csv(wave_filename,header= False, index = False)
@@ -153,7 +159,7 @@ if __name__ == "__main__":
     type_f = input('Select Format[0:PNG&CSV 1:PNG 2:CSV (def=2)] ')
     if type_f == '':
         type_f = '2'
-    if type_f == '0' or type_f == '1' or type_f == '2':
+    elif type_f == '0' or type_f == '1' or type_f == '2':
         pass
     else :
         print('\n Invalid Value')

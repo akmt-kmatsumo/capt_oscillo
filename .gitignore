@@ -9,13 +9,18 @@ env/*
 .venv/*
 build/*
 dist/*
+pict/*
+csv/*
+__pycache__/*
 
+# memo
+# 仮想環境の構築
+# py -m venv env(=venv用のディレクトリの名前)
 # 仮想環境の有効化
 # env\Scripts\Activate.ps1
-
 # 仮想環境の無効化
 # deactivate
-
+# 
 # 仮想環境にインストールしたライブラリを書き出す
 # pip freeze > requirements.txt
 # 書き出されたライブラリをインストールする
